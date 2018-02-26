@@ -1,0 +1,18 @@
+{
+  "name": "testapp",
+  "version": "1.0.0",
+  "description": "Test server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "test"
+  ],
+  "author": "Juan Luis Vega",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.2",
+    "websocket": "^1.0.25"
+  }
+}

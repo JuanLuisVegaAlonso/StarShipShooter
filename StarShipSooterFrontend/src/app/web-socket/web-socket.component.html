@@ -1,0 +1,8 @@
+<p>
+  web-socket works!
+
+  <input [(ngModel)] = "message">
+  <button (click) = "sendMessage()">Enviar</button>
+</p>
+
+<p *ngFor="let message of messages">{{message}}</p>
