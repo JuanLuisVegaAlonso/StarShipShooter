@@ -6,12 +6,15 @@ import { HttpModule } from '@angular/http';
 import { AppComponent } from './app.component';
 import { WebSocketComponent } from './web-socket/web-socket.component';
 import { GameWrapperComponent } from './game-wrapper/game-wrapper.component';
+import { PlayerInfoComponent } from './player-info/player-info.component';
+
 
 @NgModule({
   declarations: [
     AppComponent,
     WebSocketComponent,
-    GameWrapperComponent
+    GameWrapperComponent,
+    PlayerInfoComponent
   ],
   imports: [
     BrowserModule,

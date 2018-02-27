@@ -38,15 +38,15 @@ export class GameWrapperComponent implements OnInit {
 
   }
 
-  public nextStep() {
+  private nextStep() {
     this.ctx.clearRect(0, 0, 800, 800);
     this.keyListener();
     this.wallCollision(this.player1);
     this.player1.nextStep();
     this.ctx.fillStyle = this.player1.color;  
     this.ctx.fill(this.player1.shape);
-    this.bullets  = this.bullets.filter((bullet) => !this.bulletWallCollision(bullet));
-    this.drawBullets();
+    this.player1.ownBullets  = this.player1.ownBullets.filter((bullet) => !this.bulletWallCollision(bullet));
+    this.drawBullets(this.player1.ownBullets);
     this.keyListener();
     setTimeout(() => this.nextStep(), 1000 / 60);
   }
@@ -57,22 +57,22 @@ export class GameWrapperComponent implements OnInit {
       if (this.key[i]) {
         switch (i) {
           case keys.keyA:
-            this.player1.changeRotation(0.05);
+            this.player1.changeRotation(this.player1.torque);
             break;
           case keys.keyD:
-            this.player1.changeRotation(-0.05);
+            this.player1.changeRotation(-this.player1.torque);
             break;
           case keys.keyW:
-            this.player1.forward(0.2);
+            this.player1.forward(this.player1.forwardThrottle);
             break;
           case keys.keyS:
-            this.player1.forward(-0.2);
+            this.player1.forward(-this.player1.backwardThrottle);
             break;
           case keys.spaceBar:
-            this.bullets.push(this.player1.shoot());
+            this.player1.shoot();
             break;
           default:
-            console.log(i);
+            //console.log(i);
             break;
         }
       }
@@ -80,18 +80,21 @@ export class GameWrapperComponent implements OnInit {
   }
 
   public reset(){
-    this.player1.x = 20;
-    this.player1.y = 20;
-    this.player1.vx = 1;
-    this.player1.vy = 1;
+    this.player1.x = 200;
+    this.player1.y = 200;
+    this.player1.vx = -1;
+    this.player1.vy = -1;
     this.player1.size = 30;
     this.player1.rotation = Math.PI;
     this.player1.drag = 0.01;
+    this.player1.forwardThrottle = 1;
+    this.player1.backwardThrottle = 0.5;
+    this.player1.torque = 0.05;
     this.player1.color = 'rgb(255,0,255)';
   }
 
-  private drawBullets(){
-    for(let bullet of this.bullets){
+  private drawBullets(bullets:Bullet[]){
+    for(let bullet of bullets){
       bullet.nextStep();
       this.ctx.fillStyle = bullet.color;  
       this.ctx.fill(bullet.shape);
