@@ -1,16 +1,11 @@
 import { GameObject } from "./GameObject";
 import { Player } from "./player";
+import { Drawable } from "./drawable";
+import { BulletShape } from "./bulletShape";
 
-export class Bullet implements GameObject {
-    x:number;
-    y:number;
-    size:number;
-    vx:number;
-    vy:number;
-    rotation:number;
-    shape: Path2D;
+export class Bullet extends GameObject {
     color:string;
-    bulletRadius:number;
+    private bulletRadius:number;
     owner:Player;
 
     public setSpeed(speed:number){
@@ -18,14 +13,16 @@ export class Bullet implements GameObject {
         this.vy =  Math.cos(this.rotation )*speed;
     }
 
+    public setBulletRadius(bulletRadius:number){
+        this.shape = new BulletShape(bulletRadius);
+    }
 
     public nextStep(){
-        this.shape = new Path2D();
-        this.x += this.vx;
-        this.y += this.vy;
-        this.shape.moveTo(this.x,this.y);
-        this.shape = new Path2D();
-        this.shape.arc(this.x, this.y, this.bulletRadius, 0, Math.PI * 2, true);
-        this.shape.closePath();
+        super.nextStep();
+        this.draw();
+    }
+
+    public draw(){
+        this.shape.draw(this.x,this.y);
     }
 }

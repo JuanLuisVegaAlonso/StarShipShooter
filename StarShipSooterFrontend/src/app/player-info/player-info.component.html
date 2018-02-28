@@ -23,4 +23,7 @@
   <div class="player-info-cell">
     Drag : <input [(ngModel)]="player.drag"  type="range" min="0" max="1" step="0.001"> {{player.drag | number}}
   </div>
+  <div class="player-info-cell">
+    Bullets : <input [(ngModel)]="player.maxBullets"  type="range" min="0" max="100" step="1"> {{player.maxBullets | number}}
+  </div>
 </div>

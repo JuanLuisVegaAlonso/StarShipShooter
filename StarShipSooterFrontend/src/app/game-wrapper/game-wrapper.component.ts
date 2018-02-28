@@ -44,7 +44,7 @@ export class GameWrapperComponent implements OnInit {
     this.wallCollision(this.player1);
     this.player1.nextStep();
     this.ctx.fillStyle = this.player1.color;  
-    this.ctx.fill(this.player1.shape);
+    this.ctx.fill(this.player1.getShape().shape);
     this.player1.ownBullets  = this.player1.ownBullets.filter((bullet) => !this.bulletWallCollision(bullet));
     this.drawBullets(this.player1.ownBullets);
     this.keyListener();
@@ -91,13 +91,14 @@ export class GameWrapperComponent implements OnInit {
     this.player1.backwardThrottle = 0.5;
     this.player1.torque = 0.05;
     this.player1.color = 'rgb(255,0,255)';
+    this.player1.initShape();
   }
 
   private drawBullets(bullets:Bullet[]){
     for(let bullet of bullets){
       bullet.nextStep();
       this.ctx.fillStyle = bullet.color;  
-      this.ctx.fill(bullet.shape);
+      this.ctx.fill(bullet.getShape().shape);
     }
   }
   private wallCollision(player:Player){
