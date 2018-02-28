@@ -6,11 +6,12 @@ export class GameObject{
     size:number;
     vx:number;
     vy:number;
-    mass:number;
+    mass = 10;
     ax:number;
     ay:number;
     rotation:number;
     drag:number;
+    rollDrag:number=0.1;
     protected shape: Drawable;
     color: string;
 

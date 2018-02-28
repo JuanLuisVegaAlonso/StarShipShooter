@@ -4,6 +4,7 @@ import { Player } from '../classes/player';
 import { keys } from '../constants/keys';
 import { width, heigh } from '../constants/canvasSize';
 import { Bullet } from '../classes/bullet';
+import { frameRate } from '../constants/gameConfig';
 
 @Component({
   selector: 'app-game-wrapper',
@@ -48,7 +49,7 @@ export class GameWrapperComponent implements OnInit {
     this.player1.ownBullets  = this.player1.ownBullets.filter((bullet) => !this.bulletWallCollision(bullet));
     this.drawBullets(this.player1.ownBullets);
     this.keyListener();
-    setTimeout(() => this.nextStep(), 1000 / 60);
+    setTimeout(() => this.nextStep(), frameRate);
   }
 
   public keyListener() {
