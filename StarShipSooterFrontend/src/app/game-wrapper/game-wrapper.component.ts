@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Context } from 'vm';
 import { Player } from '../classes/player';
 import { keys } from '../constants/keys';
-import { width, heigh } from '../constants/canvasSize';
+import { width, height } from '../constants/canvasSize';
 import { Bullet } from '../classes/bullet';
 import { frameRate } from '../constants/gameConfig';
 
@@ -18,6 +18,8 @@ export class GameWrapperComponent implements OnInit {
   player1: Player = new Player();
   key = [];
   bullets:Bullet[] = [];
+  timeout:any;
+  showingMoreInfo:boolean;
   constructor() { }
 
   ngOnInit() {
@@ -39,8 +41,14 @@ export class GameWrapperComponent implements OnInit {
 
   }
 
+  public showMoreInfo(){
+    this.showingMoreInfo = true;
+  }
+  public showLessInfo(){
+    this.showingMoreInfo = false;
+  }
   private nextStep() {
-    this.ctx.clearRect(0, 0, 800, 800);
+    this.ctx.clearRect(0, 0, width, height);
     this.keyListener();
     this.wallCollision(this.player1);
     this.player1.nextStep();
@@ -49,7 +57,7 @@ export class GameWrapperComponent implements OnInit {
     this.player1.ownBullets  = this.player1.ownBullets.filter((bullet) => !this.bulletWallCollision(bullet));
     this.drawBullets(this.player1.ownBullets);
     this.keyListener();
-    setTimeout(() => this.nextStep(), frameRate);
+    this.timeout = setTimeout(() => this.nextStep(), frameRate);
   }
 
   public keyListener() {
@@ -81,6 +89,7 @@ export class GameWrapperComponent implements OnInit {
   }
 
   public reset(){
+    this.player1 = new Player();
     this.player1.x = 200;
     this.player1.y = 200;
     this.player1.vx = -1;
@@ -95,6 +104,14 @@ export class GameWrapperComponent implements OnInit {
     this.player1.initShape();
   }
 
+  public fullReset(){
+    if(this.timeout){
+      clearTimeout(this.timeout);
+    }
+    this.reset();
+    this.nextStep();
+    this.canvas.focus();
+  }
   private drawBullets(bullets:Bullet[]){
     for(let bullet of bullets){
       bullet.nextStep();
@@ -115,7 +132,7 @@ export class GameWrapperComponent implements OnInit {
       player.vx = 0;
       player.x = width;
     }
-    if(player.y + player.vy >= heigh){
+    if(player.y + player.vy >= height){
       player.vy = 0;
       player.y = width;
     }
@@ -130,7 +147,7 @@ export class GameWrapperComponent implements OnInit {
     if(bullet.x + bullet.vx >= width){
       return true;
     }
-    if(bullet.y + bullet.vy >= heigh){
+    if(bullet.y + bullet.vy >= height){
       return true;
     }
     return false;

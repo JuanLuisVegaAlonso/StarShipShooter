@@ -1,4 +1,4 @@
 let width = 700;
-let heigh = 700;
+let height = 700;
 
-export {width,heigh}
+export {width,height}

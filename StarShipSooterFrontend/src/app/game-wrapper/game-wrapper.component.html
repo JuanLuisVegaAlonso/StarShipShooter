@@ -1,4 +1,18 @@
-<h2>Game </h2>
-<button (click) = "reset()">NexStep</button>
-    <canvas width="700" height="700" id="canvas"></canvas>
-    <app-player-info [player]="player1"></app-player-info>
+<div class="component-wrapper">
+    <h2>Game </h2>
+    <div class="game-wrapper">
+        <div class="actions">
+            <h3>Actions</h3>
+            <button (click)="fullReset()">Reset</button>
+        </div>
+        <canvas width="700" height="700" id="canvas"></canvas>
+        <div (mouseenter)="showMoreInfo()" (mouseleave)="showLessInfo()" class="player-info-wrapper" [ngClass]="{'player-info-visible':showingMoreInfo}">
+                <div  class="show-more"></div>
+                
+                <app-player-info [player]="player1"></app-player-info>
+            </div>
+    </div>
+    
+</div>
+
+<div (click)="showLessInfo()" [ngClass]="{'overlay': showingMoreInfo}" class="no-overlay"></div>
