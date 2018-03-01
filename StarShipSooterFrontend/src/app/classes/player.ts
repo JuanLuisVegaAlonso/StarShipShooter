@@ -44,13 +44,17 @@ export class Player extends GameObject {
     private resetEngineForce() {
         this.engineForce = [0, 0];
     }
-    public changeRotation(rotation: number) {
-        this.rotation = this.rotation + rotation;
+    public changeRotation(clockWise:boolean) {
+        this.rotation +=  clockWise ? this.torque : -this.torque;
     }
 
-    public forward(thrust: number) {
-        this.engineForce[0] = Math.sin(this.rotation - Math.PI * 3 / 4) * thrust;
-        this.engineForce[1] = Math.cos(this.rotation - Math.PI * 3 / 4) * thrust;
+    public forward() {
+        this.engineForce[0] = Math.sin(this.rotation - Math.PI * 3 / 4) * this.forwardThrottle;
+        this.engineForce[1] = Math.cos(this.rotation - Math.PI * 3 / 4) * this.forwardThrottle;
+    }
+    public backward(){
+        this.engineForce[0] = -Math.sin(this.rotation - Math.PI * 3 / 4) * this.backwardThrottle;
+        this.engineForce[1] = -Math.cos(this.rotation - Math.PI * 3 / 4) * this.backwardThrottle;
     }
 
 

@@ -13,6 +13,8 @@ import { frameRate } from '../constants/gameConfig';
 })
 export class GameWrapperComponent implements OnInit {
 
+  width = width;
+  height = height;
   canvas: any;
   ctx: CanvasRenderingContext2D;
   player1: Player = new Player();
@@ -66,16 +68,16 @@ export class GameWrapperComponent implements OnInit {
       if (this.key[i]) {
         switch (i) {
           case keys.keyA:
-            this.player1.changeRotation(this.player1.torque);
+            this.player1.changeRotation(true);
             break;
           case keys.keyD:
-            this.player1.changeRotation(-this.player1.torque);
+            this.player1.changeRotation(false);
             break;
           case keys.keyW:
-            this.player1.forward(this.player1.forwardThrottle);
+            this.player1.forward();
             break;
           case keys.keyS:
-            this.player1.forward(-this.player1.backwardThrottle);
+            this.player1.backward();
             break;
           case keys.spaceBar:
             this.player1.shoot();
