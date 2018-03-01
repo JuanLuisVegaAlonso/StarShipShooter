@@ -16,6 +16,14 @@ export class Player extends GameObject {
     bulletColor = 'red';
     maxBullets = 10;
     ownBullets: Bullet[] = [];
+    rotationSpeed: number = 0;
+    rotationAcceleration: number = 0;
+    clockwise: boolean;
+    externalTorque: number = 0;
+    rotationDrag:number = 0.1;
+    rotationRollingDrag: number = 0.3;
+    rotationDragForce:number;
+    rotationRollingDragForce:number;
 
     public initShape() {
         if (this.size && this.color) {
@@ -33,9 +41,15 @@ export class Player extends GameObject {
         this.calculateRollingForce();
         this.calculateAcceleration();
         this.calculateSpeed();
+        this.calculateRotationDrag();
+        this.calculateRotationRollingDrag()
+        this.calculateRotationAcceleration();
+        this.calculateRotationSpeed();
+        this.rotation += this.rotationSpeed;
         super.nextStep();
         this.draw();
         this.resetEngineForce();
+        this.resetTurning();
     }
     public draw() {
         this.shape.draw(this.x, this.y, this.rotation);
@@ -44,15 +58,19 @@ export class Player extends GameObject {
     private resetEngineForce() {
         this.engineForce = [0, 0];
     }
-    public changeRotation(clockWise:boolean) {
-        this.rotation +=  clockWise ? this.torque : -this.torque;
+    private resetTurning() {
+        this.externalTorque = 0;
+    }
+    public changeRotation(clockWise: boolean) {
+        this.externalTorque = this.torque;
+        this.clockwise = clockWise;
     }
 
     public forward() {
         this.engineForce[0] = Math.sin(this.rotation - Math.PI * 3 / 4) * this.forwardThrottle;
         this.engineForce[1] = Math.cos(this.rotation - Math.PI * 3 / 4) * this.forwardThrottle;
     }
-    public backward(){
+    public backward() {
         this.engineForce[0] = -Math.sin(this.rotation - Math.PI * 3 / 4) * this.backwardThrottle;
         this.engineForce[1] = -Math.cos(this.rotation - Math.PI * 3 / 4) * this.backwardThrottle;
     }
@@ -78,6 +96,19 @@ export class Player extends GameObject {
     private calculateSpeed() {
         this.vx = this.vx + this.ax * frameRate;
         this.vy = this.vy + this.ay * frameRate;
+    }
+    private calculateRotationAcceleration() {
+        let rotationForce = (this.externalTorque * (this.clockwise ? 1 : -1) ) +  this.rotationDragForce + this.rotationRollingDragForce;
+        this.rotationAcceleration = rotationForce /this.mass;
+    }
+    private calculateRotationSpeed() {
+        this.rotationSpeed = this.rotationSpeed + this.rotationAcceleration * frameRate;
+    }
+    private calculateRotationDrag(){
+        this.rotationDragForce = -this.rotationDrag* Math.pow(this.rotationSpeed,2) * Math.sign(this.rotationSpeed);
+    }
+    private calculateRotationRollingDrag(){
+        this.rotationRollingDragForce = -this.rotationRollingDrag * this.rotationSpeed;
     }
     private showCurrentInfo(message: string) {
         console.log(message + ' vx: ' + this.vx + "  vy: " + this.vy);
