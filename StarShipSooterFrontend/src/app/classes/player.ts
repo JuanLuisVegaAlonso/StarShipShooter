@@ -5,6 +5,7 @@ import { PlayerShape } from "./playerShape";
 import { frameRate } from "../constants/gameConfig";
 
 export class Player extends GameObject {
+    id:number;
     forwardThrottle: number;
     backwardThrottle: number;
     torque: number;
@@ -25,6 +26,10 @@ export class Player extends GameObject {
     rotationDragForce:number;
     rotationRollingDragForce:number;
 
+    constructor(id:number){
+        super();
+        this.id =id;
+    }
     public initShape() {
         if (this.size && this.color) {
             this.shape = new PlayerShape(this.size, this.color);
@@ -47,6 +52,9 @@ export class Player extends GameObject {
         this.calculateRotationSpeed();
         this.rotation += this.rotationSpeed;
         super.nextStep();
+        for(let bullet of this.ownBullets){
+            bullet.nextStep();
+        }
         this.draw();
         this.resetEngineForce();
         this.resetTurning();
@@ -125,6 +133,7 @@ export class Player extends GameObject {
             bullet.setSpeed(this.bulletSpeed);
             bullet.setBulletRadius(this.bulletRadius);
             this.ownBullets.push(bullet);
+            bullet.getShape().initContext(this.getShape().ctx);
             return true;
         }
         return false;
