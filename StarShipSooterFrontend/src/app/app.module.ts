@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 import { WebSocketComponent } from './web-socket/web-socket.component';
 import { GameWrapperComponent } from './game-wrapper/game-wrapper.component';
 import { PlayerInfoComponent } from './player-info/player-info.component';
+import { PlayerForcesComponent } from './player-forces/player-forces.component';
 
 
 @NgModule({
@@ -14,7 +15,8 @@ import { PlayerInfoComponent } from './player-info/player-info.component';
     AppComponent,
     WebSocketComponent,
     GameWrapperComponent,
-    PlayerInfoComponent
+    PlayerInfoComponent,
+    PlayerForcesComponent
   ],
   imports: [
     BrowserModule,
