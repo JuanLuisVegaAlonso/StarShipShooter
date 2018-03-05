@@ -3,28 +3,51 @@
 }
 .game-wrapper{
     position: relative;
-    
+    padding-bottom: 2px;
     display: flex;
     flex-wrap: wrap;
-}
-h2,h3{
-    border-bottom:1px solid black;
+    justify-content: space-around;
 
+}
+h3,h2{
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,.14);
 }
 h2{
     text-justify: center;
     text-align: center;
+    
 }
 .actions{
     margin-right: 5px;
     margin-left: 5px;
+    display: flex;
+    flex-direction: column;
+    height: auto;
     h3{
+        text-align: center;
         margin-top: 2px;
         margin-bottom: 2px;
     }
+    box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
+    button{
+        margin:4px 4px;
+        padding: 1em 1em;
+        font-size: 20px;
+        border:none;
+        background-color:aquamarine;
+        transition: all 0.5s ease-in-out;
+    }
+    button:hover{
+        background-color: aqua;
+        box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
+    }
+    button:active{
+        background-color: darkblue;
+        color:white;
+    }
 }
 canvas {
-    border:1px solid black;
+    box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
 }
 $playerInfoWdith : 500px;
 .player-info-wrapper{

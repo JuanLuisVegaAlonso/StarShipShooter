@@ -30,6 +30,7 @@ export class GameWrapperComponent implements OnInit {
 
   ngOnInit() {
     this.canvas = document.getElementById("canvas");
+    this.ctx = this.canvas.getContext('2d');
     document.body.onmouseover = () => {
       this.canvas.focus();
     }
@@ -40,7 +41,7 @@ export class GameWrapperComponent implements OnInit {
     document.addEventListener('keydown', (event) => {
       this.key[event.keyCode] = event.type == 'keydown';
     }, false);
-    this.ctx = this.canvas.getContext('2d');
+    
     this.player1 = new Player(1);
     this.reset();
     this.playerController = new PlayerController(this.player1,this.key);
@@ -69,5 +70,11 @@ export class GameWrapperComponent implements OnInit {
     this.player1.color = 'rgb(255,0,255)';
     this.player1.initShape();
     this.player1.getShape().initContext(this.ctx);
+    
+  }
+  fullReset(){
+    this.reset();
+    clearTimeout(this.gameInstance.timeout);
+    this.gameInstance.loop();
   }
 }
