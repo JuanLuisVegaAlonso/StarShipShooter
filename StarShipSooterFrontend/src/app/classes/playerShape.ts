@@ -18,6 +18,9 @@ export class PlayerShape implements Drawable{
         this.nextFirstPoint(x,y,rotation);
         this.nextSecondPoint(x,y,rotation);
         this.shape.lineTo(x,y);
+        let hue = this.calculateHue(x,y,rotation);
+        let color = 'rgb('+hue[0]+','+hue[1]+','+hue[2]+')';
+        this.color = color;
         this.ctx.fillStyle = this.color;
         this.ctx.fill(this.shape);
     }
@@ -31,5 +34,12 @@ export class PlayerShape implements Drawable{
         let x =  currentX + Math.sin(rotation + Math.PI / 2) * this.size;
         let y =  currentY + Math.cos(rotation + Math.PI / 2) * this.size;
         this.shape.lineTo(x, y);
+    }
+    private calculateHue(x:number,y:number,rotation:number):number[]{
+        let hue = [];
+        hue[0] = Math.round(Math.abs(x / 2 % 255));
+        hue[1] = Math.round(Math.abs(y / 2 % 255));
+        hue[2] = Math.round(Math.abs(((rotation % (2*Math.PI)) / (Math.PI*2)) *255  ));
+        return hue;
     }
 }
