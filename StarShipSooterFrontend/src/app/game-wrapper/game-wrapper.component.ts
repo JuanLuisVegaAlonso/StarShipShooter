@@ -57,10 +57,10 @@ export class GameWrapperComponent implements OnInit {
     this.showingMoreInfo = false;
   }
   public reset(){
-    this.player1.x = 200;
-    this.player1.y = 200;
-    this.player1.vx = -1;
-    this.player1.vy = -1;
+    this.player1.position.x = 200;
+    this.player1.position.y = 200;
+    this.player1.velocity.x = -1;
+    this.player1.velocity.y = -1;
     this.player1.size = 30;
     this.player1.rotation = Math.PI;
     this.player1.drag = 0.01;

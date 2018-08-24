@@ -1,4 +1,5 @@
 import { Drawable } from "./drawable";
+import { Point } from "./point";
 
 export class PlayerShape implements Drawable{
     shape:Path2D;
@@ -12,13 +13,13 @@ export class PlayerShape implements Drawable{
     initContext(ctx: CanvasRenderingContext2D){
         this.ctx = ctx;
     }
-    public draw(x:number, y:number,rotation:number){
+    public draw(position:Point,rotation:number){
         this.shape = new Path2D();
-        this.shape.moveTo(x, y);
-        this.nextFirstPoint(x,y,rotation);
-        this.nextSecondPoint(x,y,rotation);
-        this.shape.lineTo(x,y);
-        let hue = this.calculateHue(x,y,rotation);
+        this.shape.moveTo(position.x,position.y);
+        this.nextFirstPoint(position.x,position.y,rotation);
+        this.nextSecondPoint(position.x,position.y,rotation);
+        this.shape.lineTo(position.x,position.y);
+        let hue = this.calculateHue(position.x,position.y,rotation);
         let color = 'rgb('+hue[0]+','+hue[1]+','+hue[2]+')';
         this.color = color;
         this.ctx.fillStyle = this.color;

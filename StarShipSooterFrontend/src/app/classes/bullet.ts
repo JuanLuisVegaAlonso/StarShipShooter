@@ -2,6 +2,8 @@ import { GameObject } from "./GameObject";
 import { Player } from "./player";
 import { Drawable } from "./drawable";
 import { BulletShape } from "./bulletShape";
+import { Vector } from "./vector";
+import { Point } from "./point";
 
 export class Bullet extends GameObject {
     color:string;
@@ -9,8 +11,9 @@ export class Bullet extends GameObject {
     owner:Player;
 
     public setSpeed(speed:number){
-        this.vx = Math.sin(this.rotation )*speed;
-        this.vy =  Math.cos(this.rotation )*speed;
+        const vx = Math.sin(this.rotation )*speed;
+        const vy =  Math.cos(this.rotation )*speed;
+        this.velocity = new Vector(vx,vy);
     }
 
     public setBulletRadius(bulletRadius:number){
@@ -23,6 +26,6 @@ export class Bullet extends GameObject {
     }
 
     public draw(){
-        this.shape.draw(this.x,this.y);
+        this.shape.draw(this.position);
     }
 }

@@ -29,21 +29,21 @@ export class GameInstance {
 
     private wallCollision() {
         for (const player of this.players) {
-            if (player.x + player.vx <= 0) {
-                player.vx = 0;
-                player.x = 0;
+            if (player.position.x + player.velocity.x <= 0) {
+                player.velocity.x = 0;
+                player.position.x = 0;
             }
-            if (player.y + player.vy <= 0) {
-                player.vy = 0;
-                player.y = 0;
+            if (player.position.y + player.velocity.y <= 0) {
+                player.velocity.y = 0;
+                player.position.y = 0;
             }
-            if (player.x + player.vx >= this.width) {
-                player.vx = 0;
-                player.x = this.width;
+            if (player.position.x + player.velocity.x >= this.width) {
+                player.velocity.x = 0;
+                player.position.x = this.width;
             }
-            if (player.y + player.vy >= this.height) {
-                player.vy = 0;
-                player.y = this.width;
+            if (player.velocity.y + player.velocity.y >= this.height) {
+                player.velocity.y = 0;
+                player.position.y = this.width;
             }
         }
     }
@@ -59,16 +59,16 @@ export class GameInstance {
         }
     }
     private bulletWallColision(bullet:Bullet) {
-        if (bullet.x + bullet.vx <= 0) {
+        if (bullet.position.x + bullet.velocity.x <= 0) {
             return true;
         }
-        if (bullet.y + bullet.vy <= 0) {
+        if (bullet.position.y + bullet.velocity.y <= 0) {
             return true;
         }
-        if (bullet.x + bullet.vx >= this.width) {
+        if (bullet.position.x + bullet.velocity.x >= this.width) {
             return true;
         }
-        if (bullet.y + bullet.vy >= this.height) {
+        if (bullet.position.y + bullet.velocity.y >= this.height) {
             return true;
         }
         return false;

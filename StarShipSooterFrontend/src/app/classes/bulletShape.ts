@@ -1,4 +1,5 @@
 import { Drawable } from "./drawable";
+import { Point } from "./point";
 
 export class BulletShape implements Drawable {
     shape: Path2D;
@@ -13,11 +14,11 @@ export class BulletShape implements Drawable {
         this.ctx = ctx;
     }
 
-    draw(x:number,y:number){
+    draw(position: Point){
         this.shape = new Path2D();
-        this.shape.moveTo(x,y);
+        this.shape.moveTo(position.x,position.y);
         this.shape = new Path2D();
-        this.shape.arc(x, y, this.bulletRadius, 0, Math.PI * 2, true);
+        this.shape.arc(position.x, position.y, this.bulletRadius, 0, Math.PI * 2, true);
         this.shape.closePath();
         this.ctx.fillStyle = this.color;
         this.ctx.fill(this.shape);
