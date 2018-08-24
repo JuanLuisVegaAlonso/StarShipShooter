@@ -20,6 +20,8 @@ export abstract class Weapon extends GameObject{
     abstract shoot(locationInfo:LocationInfo):boolean;
 
     nextStep(context:CanvasRenderingContext2D){
-        this.ownBullets.map(bullet =>bullet.nextStep(context))
+        for(let bullet of this.ownBullets){
+            bullet.nextStep(context);
+        }
     }
 }

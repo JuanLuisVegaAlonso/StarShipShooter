@@ -1,6 +1,5 @@
-import { Drawable } from "./drawable";
-import { Point } from "./point";
-import { LocationInfo } from "./locationInfo";
+import { LocationInfo } from "../../locationInfo";
+import { Drawable } from "../../drawable";
 
 export class BulletShape implements Drawable {
     shape: Path2D;

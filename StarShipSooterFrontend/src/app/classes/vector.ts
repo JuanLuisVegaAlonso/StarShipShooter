@@ -12,22 +12,27 @@ export class Vector{
     }
 
     public getNormalized(): Vector{
-        const normalizedX = this.x/this.getModule();
-        const normalizedY = this.y/this.getModule();
+        const moduleCalc = this.getModule();
+        let normalizedX = 0;
+        let normalizedY = 0;
+        if(moduleCalc !== 0){
+            normalizedX = this.x/this.getModule();
+            normalizedY = this.y/this.getModule();    
+        }
         return new Vector(normalizedX,normalizedY);
     }
 
-    escalarMultiply(escalar:number):Vector{
+    public escalarMultiply(escalar:number):Vector{
         this._x = escalar * this._x;
         this._y = escalar * this._y;
         return this;
     }
-    escalarDivide(escalar:number):Vector{
+    public escalarDivide(escalar:number):Vector{
         this._x = this._x / escalar;
         this._y = this._y / escalar;
         return this;
     }
-    add(otherVector:Vector):Vector{
+    public add(otherVector:Vector):Vector{
         this._x = this._x + otherVector.x;
         this._y = this._y + otherVector.y;
         return this;

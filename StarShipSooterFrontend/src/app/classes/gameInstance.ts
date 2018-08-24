@@ -76,7 +76,5 @@ export class GameInstance {
 
     insertPlayers(players: Player[]){
         this.players = players;
-        for(const player of this.players){
-        }
     }
 }

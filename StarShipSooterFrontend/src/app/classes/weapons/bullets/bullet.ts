@@ -1,8 +1,8 @@
 import { GameObject } from "../../GameObject";
 import { Player } from "../../player";
 import { Vector } from "../../vector";
-import { BulletShape } from "../../bulletShape";
 import { Weapon } from "../weapon";
+import { BulletShape } from "./bulletShape";
 
 
 export class Bullet extends GameObject {

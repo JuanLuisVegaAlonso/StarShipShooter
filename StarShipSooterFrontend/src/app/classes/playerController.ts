@@ -30,7 +30,6 @@ export class PlayerController {
                         this.player.shoot();
                         break;
                     default:
-                        console.log(i);
                         break;
                 }
             }
