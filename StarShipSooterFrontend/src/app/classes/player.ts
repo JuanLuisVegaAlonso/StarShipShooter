@@ -1,18 +1,22 @@
-import { Bullet } from "./bullet";
 import { GameObject } from "./GameObject";
 import { Drawable } from "./drawable";
 import { PlayerShape } from "./playerShape";
 import { frameRate } from "../constants/gameConfig";
 import { Point } from "./point";
+import { Vector } from "./vector";
+import { Weapon } from "./weapons/weapon";
+import { WeaponFactory } from "./weapons/weaponFactory";
+import { Bullet } from "./weapons/bullets/bullet";
+import { LocationInfo } from "./locationInfo";
 
 export class Player extends GameObject {
     id:number;
     forwardThrottle: number;
     backwardThrottle: number;
     torque: number;
-    dragForce: number[] = [0, 0];
-    rollingForce: number[] = [0, 0];
-    engineForce: number[] = [0, 0];
+    dragForce: Vector = new Vector(0, 0);
+    rollingForce: Vector = new Vector(0, 0);
+    engineForce: Vector = new Vector(0, 0);
     bulletSpeed = 10;
     bulletRadius = 2;
     bulletColor = 'red';
@@ -26,10 +30,12 @@ export class Player extends GameObject {
     rotationRollingDrag: number = 0.3;
     rotationDragForce:number;
     rotationRollingDragForce:number;
-
+    weapon:Weapon;
     constructor(id:number){
         super();
+        this.locationInfo = new LocationInfo();
         this.id =id;
+        this.weapon = WeaponFactory.createWeapon(this.locationInfo);
     }
     public initShape() {
         if (this.size && this.color) {
@@ -51,7 +57,7 @@ export class Player extends GameObject {
         this.calculateRotationRollingDrag()
         this.calculateRotationAcceleration();
         this.calculateRotationSpeed();
-        this.rotation += this.rotationSpeed;
+        this.locationInfo.rotation += this.rotationSpeed;
         super.nextStep();
         for(let bullet of this.ownBullets){
             bullet.nextStep();
@@ -61,11 +67,11 @@ export class Player extends GameObject {
         this.resetTurning();
     }
     public draw() {
-        this.shape.draw(this.position, this.rotation);
+        this.shape.draw(this.locationInfo.position, this.locationInfo.rotation);
     }
 
     private resetEngineForce() {
-        this.engineForce = [0, 0];
+        this.engineForce = new Vector(0, 0);
     }
     private resetTurning() {
         this.externalTorque = 0;
@@ -76,35 +82,39 @@ export class Player extends GameObject {
     }
 
     public forward() {
-        this.engineForce[0] = Math.sin(this.rotation - Math.PI * 3 / 4) * this.forwardThrottle;
-        this.engineForce[1] = Math.cos(this.rotation - Math.PI * 3 / 4) * this.forwardThrottle;
+        const forceX = Math.sin(this.locationInfo.rotation - Math.PI * 3 / 4) * this.forwardThrottle;
+        const forceY = Math.cos(this.locationInfo.rotation - Math.PI * 3 / 4) * this.forwardThrottle;
+        this.engineForce.changeDirection(forceX,forceY);
     }
     public backward() {
-        this.engineForce[0] = -Math.sin(this.rotation - Math.PI * 3 / 4) * this.backwardThrottle;
-        this.engineForce[1] = -Math.cos(this.rotation - Math.PI * 3 / 4) * this.backwardThrottle;
+        const forceX = -Math.sin(this.locationInfo.rotation - Math.PI * 3 / 4) * this.backwardThrottle;
+        const forceY = -Math.cos(this.locationInfo.rotation - Math.PI * 3 / 4) * this.backwardThrottle;
+        this.engineForce.changeDirection(forceX,forceY);
     }
 
-
     private calculateDragForce() {
-        this.dragForce[0] = -this.drag * Math.pow(this.velocity.x, 2) * Math.sign(this.velocity.x);
-        this.dragForce[1] = -this.drag * Math.pow(this.velocity.y, 2) * Math.sign(this.velocity.y);
+        let forceDirection = this.velocity
+                                .getNormalized()
+                                .escalarMultiply(Math.pow(this.velocity.getModule(),2))
+                                .escalarMultiply(-this.drag);
+        this.dragForce.changeDirection(forceDirection.x,forceDirection.y);
     }
 
     private calculateRollingForce() {
-        this.rollingForce[0] = -this.rollDrag * this.velocity.x;
-        this.rollingForce[1] = -this.rollDrag * this.velocity.y;
+        this.rollingForce.escalarMultiply(-this.rollDrag);
     }
 
     private calculateAcceleration() {
-        let fx = this.engineForce[0] + this.dragForce[0] + this.rollingForce[0];
-        let fy = this.engineForce[1] + this.dragForce[1] + + this.rollingForce[1];
-        this.acceleration.x = fx / this.mass;
-        this.acceleration.y = fy / this.mass;
+        this.acceleration.changeDirection(0,0);
+        this.acceleration
+            .add(this.engineForce)
+            .add(this.dragForce)
+            .add(this.rollingForce)
+            .escalarDivide(this.mass);
     }
 
     private calculateSpeed() {
-        this.velocity.x = this.velocity.x + this.acceleration.x * frameRate;
-        this.velocity.y = this.velocity.y + this.acceleration.y * frameRate;
+        this.velocity.add(this.acceleration.escalarMultiply(frameRate))
     }
     private calculateRotationAcceleration() {
         let rotationForce = (this.externalTorque * (this.clockwise ? 1 : -1) ) +  this.rotationDragForce + this.rotationRollingDragForce;
@@ -124,11 +134,13 @@ export class Player extends GameObject {
     }
 
     public shoot(): boolean {
+        // return this.weapon.shoot();
         if (this.ownBullets.length < this.maxBullets) {
             let bullet = new Bullet();
             bullet.owner = this;
-            bullet.rotation = this.rotation - 3 * Math.PI / 4;
-            bullet.position = new Point(this.position.x,this.position.y);
+            bullet.locationInfo.rotation = this.locationInfo.rotation - 3 * Math.PI / 4;
+            bullet.locationInfo.position.x =  this.locationInfo.position.x;
+            bullet.locationInfo.position.y = this.locationInfo.position.y
             bullet.color = this.bulletColor;
             bullet.setSpeed(this.bulletSpeed);
             bullet.setBulletRadius(this.bulletRadius);

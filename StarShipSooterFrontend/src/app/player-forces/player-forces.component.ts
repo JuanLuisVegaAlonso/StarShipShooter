@@ -58,7 +58,7 @@ export class PlayerForcesComponent implements OnInit {
     this.ctx.beginPath();
     this.ctx.strokeStyle = this.forceColors.drag;
     this.ctx.moveTo(this.middle[0],this.middle[1]);
-    this.ctx.lineTo(this.middle[0] + this.player.dragForce[0]*100,this.middle[1] + this.player.dragForce[1] *100 );
+    this.ctx.lineTo(this.middle[0] + this.player.dragForce.x*100,this.middle[1] + this.player.dragForce.y *100 );
     
     this.ctx.stroke();
   }
@@ -67,7 +67,7 @@ export class PlayerForcesComponent implements OnInit {
     this.ctx.beginPath();
     this.ctx.strokeStyle = this.forceColors.rollDrag;
     this.ctx.moveTo(this.middle[0],this.middle[1]);
-    this.ctx.lineTo(this.middle[0] +this.player.rollingForce[0] *100, this.middle[1] +this.player.rollingForce[1]*100);
+    this.ctx.lineTo(this.middle[0] +this.player.rollingForce.x *100, this.middle[1] +this.player.rollingForce.y*100);
     this.ctx.stroke();
   }
 
@@ -75,7 +75,7 @@ export class PlayerForcesComponent implements OnInit {
     this.ctx.beginPath();
     this.ctx.strokeStyle = this.forceColors.engineForce;
     this.ctx.moveTo(this.middle[0],this.middle[1]);
-    this.ctx.lineTo(this.middle[0] +this.player.engineForce[0] * 100,this.middle[1]+this.player.engineForce[1]*100 );
+    this.ctx.lineTo(this.middle[0] +this.player.engineForce.y * 100,this.middle[1]+this.player.engineForce.y*100 );
     this.ctx.stroke();
   }
 

@@ -3,7 +3,6 @@ import { Context } from 'vm';
 import { Player } from '../classes/player';
 import { keys } from '../constants/keys';
 import { width, height } from '../constants/canvasSize';
-import { Bullet } from '../classes/bullet';
 import { frameRate } from '../constants/gameConfig';
 import { GameInstance } from '../classes/gameInstance';
 import { PlayerController } from '../classes/playerController';
@@ -19,11 +18,10 @@ export class GameWrapperComponent implements OnInit {
   height = height;
   canvas: any;
   ctx: CanvasRenderingContext2D;
-  player1: Player = new Player(1);
+  player1: Player;
   gameInstance:GameInstance;
   playerController:PlayerController;
   key = [];
-  bullets:Bullet[] = [];
   timeout:any;
   showingMoreInfo:boolean;
   constructor() { }
@@ -57,12 +55,12 @@ export class GameWrapperComponent implements OnInit {
     this.showingMoreInfo = false;
   }
   public reset(){
-    this.player1.position.x = 200;
-    this.player1.position.y = 200;
+    this.player1.locationInfo.position.x = 200;
+    this.player1.locationInfo.position.y = 200;
     this.player1.velocity.x = -1;
     this.player1.velocity.y = -1;
     this.player1.size = 30;
-    this.player1.rotation = Math.PI;
+    this.player1.locationInfo.rotation = Math.PI;
     this.player1.drag = 0.01;
     this.player1.forwardThrottle = 1;
     this.player1.backwardThrottle = 0.5;

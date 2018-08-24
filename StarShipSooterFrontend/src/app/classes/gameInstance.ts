@@ -1,7 +1,7 @@
 import { Player } from "./player";
-import { Bullet } from "./bullet";
 import { frameRate } from "../constants/gameConfig";
 import { PlayerController } from "./playerController";
+import { Bullet } from "./weapons/bullets/bullet";
 
 export class GameInstance {
 
@@ -29,21 +29,21 @@ export class GameInstance {
 
     private wallCollision() {
         for (const player of this.players) {
-            if (player.position.x + player.velocity.x <= 0) {
+            if (player.locationInfo.position.x + player.velocity.x <= 0) {
                 player.velocity.x = 0;
-                player.position.x = 0;
+                player.locationInfo.position.x = 0;
             }
-            if (player.position.y + player.velocity.y <= 0) {
+            if (player.locationInfo.position.y + player.velocity.y <= 0) {
                 player.velocity.y = 0;
-                player.position.y = 0;
+                player.locationInfo.position.y = 0;
             }
-            if (player.position.x + player.velocity.x >= this.width) {
+            if (player.locationInfo.position.x + player.velocity.x >= this.width) {
                 player.velocity.x = 0;
-                player.position.x = this.width;
+                player.locationInfo.position.x = this.width;
             }
-            if (player.velocity.y + player.velocity.y >= this.height) {
+            if (player.locationInfo.position.y + player.velocity.y >= this.height) {
                 player.velocity.y = 0;
-                player.position.y = this.width;
+                player.locationInfo.position.y = this.width;
             }
         }
     }
@@ -59,16 +59,16 @@ export class GameInstance {
         }
     }
     private bulletWallColision(bullet:Bullet) {
-        if (bullet.position.x + bullet.velocity.x <= 0) {
+        if (bullet.locationInfo.position.x + bullet.velocity.x <= 0) {
             return true;
         }
-        if (bullet.position.y + bullet.velocity.y <= 0) {
+        if (bullet.locationInfo.position.y + bullet.velocity.y <= 0) {
             return true;
         }
-        if (bullet.position.x + bullet.velocity.x >= this.width) {
+        if (bullet.locationInfo.position.x + bullet.velocity.x >= this.width) {
             return true;
         }
-        if (bullet.position.y + bullet.velocity.y >= this.height) {
+        if (bullet.locationInfo.position.y + bullet.velocity.y >= this.height) {
             return true;
         }
         return false;
