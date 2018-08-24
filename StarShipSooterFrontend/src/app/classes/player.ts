@@ -17,11 +17,6 @@ export class Player extends GameObject {
     dragForce: Vector = new Vector(0, 0);
     rollingForce: Vector = new Vector(0, 0);
     engineForce: Vector = new Vector(0, 0);
-    bulletSpeed = 10;
-    bulletRadius = 2;
-    bulletColor = 'red';
-    maxBullets = 10;
-    ownBullets: Bullet[] = [];
     rotationSpeed: number = 0;
     rotationAcceleration: number = 0;
     clockwise: boolean;
@@ -48,7 +43,7 @@ export class Player extends GameObject {
             throw Error("Size is not defined");
         }
     }
-    public nextStep() {
+    public nextStep(context: CanvasRenderingContext2D) {
         this.calculateDragForce();
         this.calculateRollingForce();
         this.calculateAcceleration();
@@ -58,16 +53,14 @@ export class Player extends GameObject {
         this.calculateRotationAcceleration();
         this.calculateRotationSpeed();
         this.locationInfo.rotation += this.rotationSpeed;
-        super.nextStep();
-        for(let bullet of this.ownBullets){
-            bullet.nextStep();
-        }
-        this.draw();
+        super.nextStep(context);
+        this.weapon.nextStep(context);
+        this.draw(context);
         this.resetEngineForce();
         this.resetTurning();
     }
-    public draw() {
-        this.shape.draw(this.locationInfo.position, this.locationInfo.rotation);
+    public draw(context: CanvasRenderingContext2D) {
+        this.shape.draw(context,this.locationInfo);
     }
 
     private resetEngineForce() {
@@ -134,8 +127,8 @@ export class Player extends GameObject {
     }
 
     public shoot(): boolean {
-        // return this.weapon.shoot();
-        if (this.ownBullets.length < this.maxBullets) {
+         return this.weapon.shoot(this.locationInfo);
+        /*if (this.ownBullets.length < this.maxBullets) {
             let bullet = new Bullet();
             bullet.owner = this;
             bullet.locationInfo.rotation = this.locationInfo.rotation - 3 * Math.PI / 4;
@@ -145,9 +138,8 @@ export class Player extends GameObject {
             bullet.setSpeed(this.bulletSpeed);
             bullet.setBulletRadius(this.bulletRadius);
             this.ownBullets.push(bullet);
-            bullet.getShape().initContext(this.getShape().ctx);
             return true;
         }
-        return false;
+        return false;*/
     }
 }

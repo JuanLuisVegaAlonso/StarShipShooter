@@ -8,7 +8,6 @@ import { Weapon } from "../weapon";
 export class Bullet extends GameObject {
     color:string;
     private bulletRadius:number;
-    owner:Weapon;
 
     public setSpeed(speed:number){
         const vx = Math.sin(this.locationInfo.rotation )*speed;
@@ -20,12 +19,12 @@ export class Bullet extends GameObject {
         this.shape = new BulletShape(bulletRadius);
     }
 
-    public nextStep(){
-        super.nextStep();
-        this.draw();
+    public nextStep(context:CanvasRenderingContext2D){
+        super.nextStep(context);
+        this.draw(context);
     }
 
-    public draw(){
-        this.shape.draw(this.locationInfo.position);
+    public draw(context:CanvasRenderingContext2D){
+        this.shape.draw(context,this.locationInfo);
     }
 }

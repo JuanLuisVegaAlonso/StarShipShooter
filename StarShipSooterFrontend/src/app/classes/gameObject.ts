@@ -21,7 +21,7 @@ export class GameObject{
 
     }
 
-    nextStep(){
+    nextStep(context:CanvasRenderingContext2D){
         this.locationInfo.position.move(this.velocity);
     }
 

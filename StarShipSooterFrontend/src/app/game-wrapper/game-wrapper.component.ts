@@ -67,7 +67,6 @@ export class GameWrapperComponent implements OnInit {
     this.player1.torque = 0.05;
     this.player1.color = 'rgb(255,0,255)';
     this.player1.initShape();
-    this.player1.getShape().initContext(this.ctx);
     
   }
   fullReset(){

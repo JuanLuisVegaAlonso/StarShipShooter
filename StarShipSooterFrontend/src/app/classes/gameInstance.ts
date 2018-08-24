@@ -49,13 +49,13 @@ export class GameInstance {
     }
     private nextStep(){
         for(let player of this.players){
-            player.nextStep();
+            player.nextStep(this.ctx);
         }
     }
 
     private bulletWallColisionNotBucle(){
         for(const player  of this.players){
-            player.ownBullets = player.ownBullets.filter(bullet => !this.bulletWallColision(bullet));
+            player.weapon.ownBullets = player.weapon.ownBullets.filter(bullet => !this.bulletWallColision(bullet));
         }
     }
     private bulletWallColision(bullet:Bullet) {
@@ -77,7 +77,6 @@ export class GameInstance {
     insertPlayers(players: Player[]){
         this.players = players;
         for(const player of this.players){
-            player.getShape().initContext(this.ctx);
         }
     }
 }
