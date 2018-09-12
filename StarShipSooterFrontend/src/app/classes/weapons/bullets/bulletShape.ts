@@ -3,10 +3,10 @@ import { Drawable } from "../../drawable";
 
 export class BulletShape implements Drawable {
     shape: Path2D;
-    bulletRadius:number;
+    bulletRadius: number;
     color:string;
-    constructor(bulletRadius:number,color = 'red'){
-        this.bulletRadius = bulletRadius;
+    constructor(getBulletRadius:() => number,color = 'red'){
+        this.bulletRadius = getBulletRadius();
         this.color = color;
     }
 

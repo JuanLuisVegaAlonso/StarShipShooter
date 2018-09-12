@@ -55,16 +55,16 @@ export class GameWrapperComponent implements OnInit {
     this.showingMoreInfo = false;
   }
   public reset(){
-    this.player1.locationInfo.position.x = 200;
-    this.player1.locationInfo.position.y = 200;
-    this.player1.velocity.x = -1;
-    this.player1.velocity.y = -1;
-    this.player1.size = 30;
-    this.player1.locationInfo.rotation = Math.PI;
-    this.player1.drag = 0.01;
-    this.player1.forwardThrottle = 1;
-    this.player1.backwardThrottle = 0.5;
-    this.player1.torque = 0.05;
+    this.player1.physicsController.locationInfo.position.x = 200;
+    this.player1.physicsController.locationInfo.position.y = 200;
+    this.player1.physicsController.velocity.x = -1;
+    this.player1.physicsController.velocity.y = -1;
+    this.player1.size = 100;
+    this.player1.physicsController.locationInfo.rotation = Math.PI;
+    this.player1.physicsController.drag = 0.01;
+    this.player1.physicsController.forwardThrottle = 1;
+    this.player1.physicsController.backwardThrottle = 0.5;
+    this.player1.physicsController.torque = 0.05;
     this.player1.color = 'rgb(255,0,255)';
     this.player1.initShape();
     

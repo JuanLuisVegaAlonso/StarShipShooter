@@ -2,29 +2,23 @@ import { Drawable } from "./drawable";
 import { Vector } from "./vector";
 import { Point } from "./point";
 import { LocationInfo } from "./locationInfo";
-export class GameObject{
-    velocity:Vector;
-    acceleration:Vector;
+import { PhysicsController } from "./physics/physics-controller";
+import { WallCollisionDetector } from "./physics/wall-collision-detector";
+export abstract class GameObject{
+    physicsController: PhysicsController;
+    wallCollisionDetector: WallCollisionDetector;
     size:number;
-    mass = 10;
-    drag:number;
-    rollDrag:number=0.1;
     protected shape: Drawable;
     color: string;
-
     locationInfo:LocationInfo;
-    
     constructor(){
+        this.physicsController = new PhysicsController();
+        this.wallCollisionDetector = new WallCollisionDetector(this.physicsController);
         this.locationInfo = new LocationInfo();
-        this.velocity = new Vector(0,0);
-        this.acceleration = new Vector(0,0);
 
     }
-
-    nextStep(context:CanvasRenderingContext2D){
-        this.locationInfo.position.move(this.velocity);
-    }
-
+    abstract nextStep(context: CanvasRenderingContext2D);
+    
     getShape(){
         return this.shape;
     }

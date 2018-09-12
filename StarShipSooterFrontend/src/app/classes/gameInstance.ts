@@ -2,6 +2,7 @@ import { Player } from "./player";
 import { frameRate } from "../constants/gameConfig";
 import { PlayerController } from "./playerController";
 import { Bullet } from "./weapons/bullets/bullet";
+import { Wall } from "./physics/wall-collision-detector";
 
 export class GameInstance {
 
@@ -29,21 +30,26 @@ export class GameInstance {
 
     private wallCollision() {
         for (const player of this.players) {
-            if (player.locationInfo.position.x + player.velocity.x <= 0) {
-                player.velocity.x = 0;
-                player.locationInfo.position.x = 0;
-            }
-            if (player.locationInfo.position.y + player.velocity.y <= 0) {
-                player.velocity.y = 0;
-                player.locationInfo.position.y = 0;
-            }
-            if (player.locationInfo.position.x + player.velocity.x >= this.width) {
-                player.velocity.x = 0;
-                player.locationInfo.position.x = this.width;
-            }
-            if (player.locationInfo.position.y + player.velocity.y >= this.height) {
-                player.velocity.y = 0;
-                player.locationInfo.position.y = this.width;
+            const collisions = player.wallCollisionDetector.getCollitions();
+            for(let collision of collisions){
+                switch (collision){
+                    case Wall.LEFT:
+                        player.physicsController.velocity.x = 0;
+                        player.physicsController.locationInfo.position.x = 0;
+                    break;
+                    case Wall.TOP:
+                        player.physicsController.velocity.y = 0;
+                        player.physicsController.locationInfo.position.y = 0;
+                    break;
+                    case Wall.RIGHT:
+                        player.physicsController.velocity.x = 0;
+                        player.physicsController.locationInfo.position.x = this.width;
+                    break;
+                    case Wall.BOT:
+                        player.physicsController.velocity.y = 0;
+                        player.physicsController.locationInfo.position.y = this.width;
+                    break;
+                }
             }
         }
     }
@@ -59,16 +65,8 @@ export class GameInstance {
         }
     }
     private bulletWallColision(bullet:Bullet) {
-        if (bullet.locationInfo.position.x + bullet.velocity.x <= 0) {
-            return true;
-        }
-        if (bullet.locationInfo.position.y + bullet.velocity.y <= 0) {
-            return true;
-        }
-        if (bullet.locationInfo.position.x + bullet.velocity.x >= this.width) {
-            return true;
-        }
-        if (bullet.locationInfo.position.y + bullet.velocity.y >= this.height) {
+        const collisions = bullet.wallCollisionDetector.getCollitions();
+        if( collisions.length > 0){
             return true;
         }
         return false;
