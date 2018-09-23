@@ -1,6 +1,6 @@
-<div class="player-info-wrapper">
+<div class="player-info-wrapper" *ngIf="player">
   <h3>Properties</h3>
-  <div class="player-info-cell">
+  <!--<div class="player-info-cell">
     <label>Posicion X:</label> {{player.x | number}}
   </div>
   <div class="player-info-cell">
@@ -17,41 +17,41 @@
   </div>
   <div class="player-info-cell">
     <label>RollingDragForce Y:</label> {{player.rollingForce[1] | number}}
-  </div>
+  </div>-->
   <div class="player-info-cell">
     <label>Aceleracion:</label>
-    <input [(ngModel)]="player.forwardThrottle" type="range" min="0" max="15" step="0.1"> {{player.forwardThrottle | number}}
+    <input [(ngModel)]="player?.physicsController.forwardThrottle" type="range" min="0" max="15" step="0.1"> {{player.physicsController.forwardThrottle | number}}
   </div>
   <div class="player-info-cell">
     <label>Deceleracion:</label>
-    <input [(ngModel)]="player.backwardThrottle" type="range" min="0" max="5" step="0.1"> {{player.backwardThrottle | number}}
+    <input [(ngModel)]="player?.physicsController.backwardThrottle" type="range" min="0" max="5" step="0.1"> {{player.physicsController.backwardThrottle | number}}
   </div>
   <div class="player-info-cell">
     <label>Torque:</label>
-    <input [(ngModel)]="player.torque" type="range" min="0" max="0.1" step="0.001"> {{player.torque | number}}
+    <input [(ngModel)]="player?.physicsController.torque" type="range" min="0" max="0.1" step="0.001"> {{player.physicsController.torque | number}}
   </div>
   <div class="player-info-cell">
     <label>Drag:</label>
-    <input [(ngModel)]="player.drag" type="range" min="0" max="1" step="0.001"> {{player.drag | number}}
+    <input [(ngModel)]="player?.physicsController.drag" type="range" min="0" max="1" step="0.001"> {{player.physicsController.drag | number}}
   </div>
   <div class="player-info-cell">
     <label>Roll drag:</label>
-    <input [(ngModel)]="player.rollDrag" type="range" min="0" max="1" step="0.001"> {{player.rollDrag | number}}
+    <input [(ngModel)]="player?.physicsController.rollDrag" type="range" min="0" max="1" step="0.001"> {{player.physicsController.rollDrag | number}}
   </div>
   <div class="player-info-cell">
     <label> Mass:</label>
-    <input [(ngModel)]="player.mass" type="range" min="1" max="500" step="1"> {{player.mass | number}}
+    <input [(ngModel)]="player?.physicsController.mass" type="range" min="1" max="500" step="1"> {{player.physicsController.mass | number}}
   </div>
   <div class="player-info-cell">
     <label> Rotation drag:</label>
-    <input [(ngModel)]="player.rotationDrag" type="range" min="0" max="3" step="0.01"> {{player.rotationDrag | number}}
+    <input [(ngModel)]="player?.physicsController.rotationDrag" type="range" min="0" max="3" step="0.01"> {{player.physicsController.rotationDrag | number}}
   </div>
   <div class="player-info-cell">
     <label> Rotation roll drag:</label>
-    <input [(ngModel)]="player.rotationRollDrag" type="range" min="0" max="3" step="0.01"> {{player.rotationRollDrag | number}}
+    <input [(ngModel)]="player.physicsController.rotationRollDrag" type="range" min="0" max="3" step="0.01"> {{player.physicsController.rotationRollDrag | number}}
   </div>
   <div class="player-info-cell">
     <label>Bullets:</label>
-    <input [(ngModel)]="player.maxBullets" type="range" min="0" max="100" step="1"> {{player.maxBullets | number}}
+    <input [(ngModel)]="player?.weapon.maxBullets" type="range" min="0" max="100" step="1"> {{player.weapon.maxBullets | number}}
   </div>
 </div>

@@ -1,7 +1,7 @@
 import { Player } from "./ships/player";
 import { keys } from "../constants/keys";
 
-export enum Actions{
+export enum Action{
     FORWARD,BACKWARD,TURN_LEFT,TURN_RIGHT,SHOOT
 }
 export class PlayerController {
@@ -12,7 +12,7 @@ export class PlayerController {
         this.key = key;
     }
 
-    evaluateInput():Actions[] {
+    evaluateInput():Action[] {
         let length = this.key.length;
         const pressedActions = [];
         for (let i = 0; i < length; i++) {
@@ -20,23 +20,23 @@ export class PlayerController {
                 switch (i) {
                     case keys.keyA:
                         // this.player.changeRotation(true);
-                        pressedActions.push(Actions.TURN_RIGHT)
+                        pressedActions.push(Action.TURN_RIGHT)
                         break;
                     case keys.keyD:
                         // this.player.changeRotation(false);
-                        pressedActions.push(Actions.TURN_LEFT)
+                        pressedActions.push(Action.TURN_LEFT)
                         break;
                     case keys.keyW:
                         //this.player.forward();
-                        pressedActions.push(Actions.FORWARD)
+                        pressedActions.push(Action.FORWARD)
                         break;
                     case keys.keyS:
                         //this.player.backward();
-                        pressedActions.push(Actions.BACKWARD)
+                        pressedActions.push(Action.BACKWARD)
                         break;
                     case keys.spaceBar:
                         //this.player.shoot();
-                        pressedActions.push(Actions.SHOOT);
+                        pressedActions.push(Action.SHOOT);
                         break;
                     default:
                         break;

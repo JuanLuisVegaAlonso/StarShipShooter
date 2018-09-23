@@ -1,6 +1,6 @@
 import { Player } from "./ships/player";
 import { frameRate } from "../constants/gameConfig";
-import { PlayerController, Actions } from "./playerController";
+import { PlayerController, Action } from "./playerController";
 import { Bullet } from "./weapons/bullets/bullet";
 import { Wall } from "./physics/wall-collision-detector";
 import { GameObject } from "./GameObject";
@@ -24,21 +24,17 @@ export class GameInstance {
         this.width = width;
         this.ctx = ctx;
         this.playerController = playerController;
-        this.gameObjects = [];
         this._bulletFactory = new BulletFactory(this,(bullet) => this.bulletCollisionedOnWall(bullet));
-        this._weaponFactory = new WeaponFactory(this);
+        this._weaponFactory = new WeaponFactory(this, this._bulletFactory);
+        this.resetGameInstance();
     }
-    public startGame(){
-        this.loop();
-    }
+   
     private loop(){
         this.ctx.clearRect(0,0,this.width,this.height);
-
         // TODO change to allow multiple players
         if(this.players && this.players.length > 0){
             this.players[0].evaluateUserInput(this.playerController.evaluateInput());
         }
-       // this.bulletWallColisionNotBucle();
         this.updateAllGameObjects();
         this.timeout = setTimeout(()=> this.loop(),frameRate);
     }
@@ -51,12 +47,32 @@ export class GameInstance {
     private bulletCollisionedOnWall(bullet: Bullet){
         this.removeGameObject(bullet);
     }
-    insertPlayers(players: Player[]){
-        this.players = players;
-        for(const player of players){
-            this.addGameObject(player);
+
+    private resetPlayer(){
+        if(this.players && this.players.length > 0){
+            const player1 = this.players[0];
+            player1.physicsController.locationInfo.position.x = 200;
+            player1.physicsController.locationInfo.position.y = 200;
+            player1.physicsController.velocity.x = -1;
+            player1.physicsController.velocity.y = -1;
+            player1.size = 100;
+            player1.physicsController.locationInfo.rotation = Math.PI;
+            player1.physicsController.drag = 0.01;
+            player1.physicsController.forwardThrottle = 1;
+            player1.physicsController.backwardThrottle = 0.5;
+            player1.physicsController.torque = 0.05;
+            player1.color = 'rgb(255,0,255)';
+            player1.initShape();
         }
     }
+    private resetGameInstance(){
+        if(this.timeout){
+            clearTimeout(this.timeout);
+        }
+        this.gameObjects = [];
+        this.players = [];
+    }
+    // Public API
     public addGameObject(gameObject:GameObject){
         this.gameObjects.push(gameObject);
     }
@@ -66,4 +82,24 @@ export class GameInstance {
             this.gameObjects.splice(gameObjectPosition,1);
         }
     }
+    public startGame(){
+        this.resetGameInstance();
+        const player1 = new Player(
+                                    1,
+                                    GameObject.initGameObject(),
+                                    this._weaponFactory.createWeapon()
+                                );
+        this.players.push(player1);
+        this.addGameObject(player1);
+        this.resetPlayer();
+        this.loop();
+    }
+
+    get player1 (){
+        if(this.players && this.players.length > 0){
+            return this.players[0];
+        }
+        return undefined;
+    }
+
 }

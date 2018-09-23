@@ -12,7 +12,7 @@ import { PhysicsController } from "../physics/physics-controller";
 import { WallCollisionDetector, Wall } from "../physics/wall-collision-detector";
 import { width } from "../../constants/canvasSize";
 import { BulletFactory } from "../weapons/bullets/bulletFactory";
-import { Actions } from "../playerController";
+import { Action } from "../playerController";
 
 export class Player extends GameObject {
     id:number;
@@ -67,22 +67,22 @@ export class Player extends GameObject {
                 }
             }
     }
-    public evaluateUserInput(actions: Actions[]){
+    public evaluateUserInput(actions: Action[]){
         for(const action of actions){
             switch (action){
-                case Actions.FORWARD:
+                case Action.FORWARD:
                     this.forward();
                 break;
-                case Actions.BACKWARD:
+                case Action.BACKWARD:
                     this.backward();
                 break;
-                case Actions.TURN_RIGHT:
+                case Action.TURN_RIGHT:
                     this.changeRotation(true);
                 break;
-                case Actions.TURN_LEFT:
+                case Action.TURN_LEFT:
                     this.changeRotation(false);
                 break;
-                case Actions.SHOOT:
+                case Action.SHOOT:
                     this.shoot();
                 break;
             }
