@@ -12,8 +12,6 @@ export class BulletShape implements Drawable {
 
     draw(ctx:CanvasRenderingContext2D,locationInfo: LocationInfo){
         this.shape = new Path2D();
-        this.shape.moveTo(locationInfo.position.x,locationInfo.position.y);
-        this.shape = new Path2D();
         this.shape.arc(locationInfo.position.x, locationInfo.position.y, this.bulletRadius, 0, Math.PI * 2, true);
         this.shape.closePath();
         ctx.fillStyle = this.color;

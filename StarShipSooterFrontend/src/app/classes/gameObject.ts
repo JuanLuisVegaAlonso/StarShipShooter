@@ -4,18 +4,29 @@ import { Point } from "./point";
 import { LocationInfo } from "./locationInfo";
 import { PhysicsController } from "./physics/physics-controller";
 import { WallCollisionDetector } from "./physics/wall-collision-detector";
-export abstract class GameObject{
+
+
+export interface GameObjectDependencies {
+    physicsController: PhysicsController;
+    wallCollisionDetector: WallCollisionDetector;
+}
+
+export abstract class GameObject {
+
+    static initGameObject() {
+        const locationInfo = new LocationInfo();
+        const physicsController = new PhysicsController(locationInfo);
+        const wallCollisionDetector = new WallCollisionDetector(physicsController);
+        return { physicsController,wallCollisionDetector};
+    }
     physicsController: PhysicsController;
     wallCollisionDetector: WallCollisionDetector;
     size:number;
     protected shape: Drawable;
     color: string;
-    locationInfo:LocationInfo;
-    constructor(){
-        this.physicsController = new PhysicsController();
-        this.wallCollisionDetector = new WallCollisionDetector(this.physicsController);
-        this.locationInfo = new LocationInfo();
-
+    constructor(gameObjectDependencies:GameObjectDependencies){
+        this.physicsController = gameObjectDependencies.physicsController;
+        this.wallCollisionDetector = gameObjectDependencies.wallCollisionDetector;
     }
     abstract nextStep(context: CanvasRenderingContext2D);
     

@@ -1,4 +1,4 @@
-import { GameObject } from "./GameObject";
+import { GameObject, GameObjectDependencies } from "./GameObject";
 import { Drawable } from "./drawable";
 import { PlayerShape } from "./playerShape";
 import { frameRate } from "../constants/gameConfig";
@@ -14,10 +14,10 @@ import { WallCollisionDetector, Wall } from "./physics/wall-collision-detector";
 export class Player extends GameObject {
     id:number;
     weapon:Weapon;
-    constructor(id:number){
-        super();
+    constructor(id:number,gameObjectDependencies:GameObjectDependencies){
+        super(gameObjectDependencies);
         this.id =id;
-        this.weapon = WeaponFactory.createWeapon(this.locationInfo);
+        this.weapon = WeaponFactory.createWeapon(gameObjectDependencies);
     }
     public initShape() {
         if (this.size && this.color) {
@@ -31,16 +31,16 @@ export class Player extends GameObject {
         }
     }
     public nextStep(context: CanvasRenderingContext2D) {
-        this.locationInfo = this.physicsController.getNextLocationInfo();
+        this.physicsController.nextLocationInfo();
         this.weapon.nextStep(context);
-        this.draw(context);
+        this.draw(context,this.physicsController.locationInfo);
         this.physicsController.resetEngineForce();
         this.physicsController.resetTurning();
     }
     
     
-    public draw(context: CanvasRenderingContext2D) {
-        this.shape.draw(context,this.locationInfo);
+    public draw(context: CanvasRenderingContext2D,locationInfo:LocationInfo) {
+        this.shape.draw(context,locationInfo);
     }
     public changeRotation(clockWise: boolean) {
         this.physicsController.changeRotation(clockWise);
@@ -54,6 +54,6 @@ export class Player extends GameObject {
     }
 
     public shoot(): boolean {
-         return this.weapon.shoot(this.locationInfo);
+         return this.weapon.shoot(this.physicsController.locationInfo);
     }
 }

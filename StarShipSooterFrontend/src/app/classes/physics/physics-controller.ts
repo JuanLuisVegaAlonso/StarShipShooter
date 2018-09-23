@@ -28,6 +28,10 @@ export class PhysicsController {
     rotationDragForce:number = 0;
     rotationRollingDragForce:number = 0;
 
+    constructor(locationInfo:LocationInfo){
+        this.locationInfo = locationInfo;
+    }
+
     private calculateDragForce() {
         let forceDirection = this.velocity
                                 .getNormalized()
@@ -84,7 +88,7 @@ export class PhysicsController {
     }
     
 
-    public getNextLocationInfo(): LocationInfo{
+    public nextLocationInfo(): LocationInfo{
         this.calculateDragForce();
         this.calculateRollingForce();
         this.calculateAcceleration();

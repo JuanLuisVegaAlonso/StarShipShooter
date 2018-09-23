@@ -4,6 +4,7 @@ import { Vector } from "../vector";
 import { Asteroid } from "./asteroid";
 import { Point } from "../point";
 import { LocationInfo } from "../locationInfo";
+import { GameObject } from "../GameObject";
 export class AsteroidFactory {
     private _canvasSize: number[];
     private _difficulty: number;
@@ -43,6 +44,6 @@ export class AsteroidFactory {
             // y == witdh
             locationInfo.position =  new Point(Math.random() * this._canvasSize[0],this._canvasSize[1]);
         }
-        return new NormalAsteroid(color, shape, rollDrag, velocity, locationInfo,1);
+        return new NormalAsteroid(color, shape, rollDrag, velocity, GameObject.initGameObject(),1);
     }
 }

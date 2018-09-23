@@ -2,9 +2,10 @@ import { Weapon } from "./weapon";
 import { NormalWeapon } from "./normalWeapon";
 import { Point } from "../point";
 import { LocationInfo } from "../locationInfo";
+import { GameObjectDependencies } from "../GameObject";
 
 export class WeaponFactory{
-    static createWeapon(position:LocationInfo): Weapon{
-        return new NormalWeapon(position);
+    static createWeapon(gameObjectDependencies:GameObjectDependencies): Weapon{
+        return new NormalWeapon(gameObjectDependencies);
     }
 }

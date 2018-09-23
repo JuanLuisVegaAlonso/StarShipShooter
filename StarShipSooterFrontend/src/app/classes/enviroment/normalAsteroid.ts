@@ -1,4 +1,4 @@
-import { GameObject } from "../GameObject";
+import { GameObject, GameObjectDependencies } from "../GameObject";
 import { Drawable } from "../drawable";
 import { Vector } from "../vector";
 import { Asteroid } from "./asteroid";
@@ -13,18 +13,19 @@ export class NormalAsteroid extends GameObject implements Asteroid{
             shape:Drawable,
             rollDrag:number,
             velocity:Vector,
-            locationInfo:LocationInfo,
+            gameObjectDependencies:GameObjectDependencies,
             size:number){
-        super();
-        this.physicsController = new PhysicsController();
+        super(gameObjectDependencies);
         this.physicsController.rollDrag = rollDrag;
         this.physicsController.velocity = velocity;
-        this.physicsController.locationInfo = locationInfo;
         this.size = size;
     }
 
 
     explode(){
 
+    }
+    nextStep(){
+        
     }
 }

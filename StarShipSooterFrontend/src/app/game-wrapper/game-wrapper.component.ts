@@ -6,6 +6,7 @@ import { width, height } from '../constants/canvasSize';
 import { frameRate } from '../constants/gameConfig';
 import { GameInstance } from '../classes/gameInstance';
 import { PlayerController } from '../classes/playerController';
+import { GameObject } from '../classes/GameObject';
 
 @Component({
   selector: 'app-game-wrapper',
@@ -40,7 +41,7 @@ export class GameWrapperComponent implements OnInit {
       this.key[event.keyCode] = event.type == 'keydown';
     }, false);
     
-    this.player1 = new Player(1);
+    this.player1 = new Player(1,GameObject.initGameObject());
     this.reset();
     this.playerController = new PlayerController(this.player1,this.key);
     this.gameInstance = new GameInstance(width,height,this.ctx,this.playerController);

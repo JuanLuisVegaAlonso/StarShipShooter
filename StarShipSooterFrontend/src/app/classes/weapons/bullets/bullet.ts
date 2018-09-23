@@ -5,16 +5,15 @@ import { Weapon } from "../weapon";
 import { BulletShape } from "./bulletShape";
 import { PhysicsController } from "../../physics/physics-controller";
 import { WallCollisionDetector, Wall } from "../../physics/wall-collision-detector";
+import { LocationInfo } from "../../locationInfo";
 
 
 export class Bullet extends GameObject {
     color:string;
     private bulletRadius:number;
 
-    constructor(){
-        super();
-        this.physicsController = new PhysicsController();
-        this.wallCollisionDetector = new WallCollisionDetector(this.physicsController);
+    constructor(gameObjectDependencies){
+        super(gameObjectDependencies);
     }
 
     public setSpeed(speed:number){
@@ -28,11 +27,11 @@ export class Bullet extends GameObject {
     }
 
     public nextStep(context:CanvasRenderingContext2D){
-        this.locationInfo = this.physicsController.getNextLocationInfo();
-        this.draw(context);
+        this.physicsController.nextLocationInfo();
+        this.draw(context,this.physicsController.locationInfo);
     }
 
-    public draw(context:CanvasRenderingContext2D){
-        this.shape.draw(context,this.locationInfo);
+    public draw(context:CanvasRenderingContext2D,locationInfo:LocationInfo){
+        this.shape.draw(context,locationInfo);
     }
 }

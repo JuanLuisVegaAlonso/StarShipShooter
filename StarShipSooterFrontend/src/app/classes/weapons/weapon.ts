@@ -1,5 +1,5 @@
 import { Point } from "../point";
-import { GameObject } from "../GameObject";
+import { GameObject, GameObjectDependencies } from "../GameObject";
 import { Bullet } from "./bullets/bullet";
 import { LocationInfo } from "../locationInfo";
 
@@ -11,8 +11,8 @@ export abstract class Weapon extends GameObject{
     ownBullets: Bullet[];
     fireRate:number;
     protected lastShootedAt:number;
-    constructor(position:LocationInfo){
-        super();
+    constructor(gameObjectDependencies:GameObjectDependencies){
+        super(gameObjectDependencies);
         this.bulletColor = 'red';
         this.bulletSpeed = 10;
         this.maxBullets = 10;
