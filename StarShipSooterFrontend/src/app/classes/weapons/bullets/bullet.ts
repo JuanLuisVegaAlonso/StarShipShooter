@@ -6,19 +6,27 @@ import { PhysicsController } from "../../physics/physics-controller";
 import { WallCollisionDetector, Wall } from "../../physics/wall-collision-detector";
 import { LocationInfo } from "../../locationInfo";
 
-
+export enum BulletEvent{
+    WALL_HIT
+}
 export class Bullet extends GameObject {
     color:string;
-    private _onWallColission: (bullet:Bullet) => void;
-    private _weaponOnWallColission: (bullet: Bullet) => void;
+    private _subscribers:((bulletEvent:BulletEvent,Bullet?:Bullet) => void)[];
     private bulletRadius:number;
 
-    constructor(gameObjectDependencies,onWallColission: (bullet:Bullet) => void,weaponOnWallColission: (bullet:Bullet) => void){
+    constructor(gameObjectDependencies){
         super(gameObjectDependencies);
-        this._onWallColission = onWallColission;
-        this._weaponOnWallColission = weaponOnWallColission;
+        this._subscribers = [];
     }
 
+    public subscribe(subscription: (bulletEvent:BulletEvent,Bullet?:Bullet) => void){
+        this._subscribers.push(subscription);
+    }
+    private notify(event: BulletEvent){
+        for(const subscirber of this._subscribers){
+            subscirber(event,this);
+        }
+    }
     public setSpeed(speed:number){
         const vx = Math.sin(this.physicsController.locationInfo.rotation )*speed;
         const vy =  Math.cos(this.physicsController.locationInfo.rotation )*speed;
@@ -32,8 +40,7 @@ export class Bullet extends GameObject {
     public nextStep(context:CanvasRenderingContext2D){
         this.physicsController.nextLocationInfo();
         if(this.wallCollisionDetector.getCollitions().length > 0){
-            this._onWallColission(this);
-            this._weaponOnWallColission(this);
+            this.notify(BulletEvent.WALL_HIT);
         }
         this.draw(context,this.physicsController.locationInfo);
     }

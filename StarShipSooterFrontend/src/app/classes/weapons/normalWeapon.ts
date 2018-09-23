@@ -2,7 +2,7 @@ import { Weapon } from "./weapon";
 import { GameObject, GameObjectDependencies } from "../GameObject";
 import { Point } from "../point";
 import { LocationInfo } from "../locationInfo";
-import { Bullet } from "./bullets/bullet";
+import { Bullet, BulletEvent } from "./bullets/bullet";
 import { BulletFactory } from "./bullets/bulletFactory";
 
 export class NormalWeapon extends Weapon{
@@ -15,9 +15,8 @@ export class NormalWeapon extends Weapon{
     }
     shoot(locationInfo:LocationInfo):boolean{
         if (this.ownBullets.length < this.maxBullets && this.canShoot() ) {
-
-            // TODO somehow subscribe to the wall collision event
             let bullet = this._bulletFactory.createBullet((bullet)=> this.deleteBullet(bullet));
+            bullet.subscribe((bulletEvent,bullet) => this.bulletListener(bulletEvent,bullet));
             bullet.physicsController.locationInfo.rotation = locationInfo.rotation - 3 * Math.PI / 4;
             bullet.physicsController.locationInfo.position =  new Point(locationInfo.position.x,locationInfo.position.y);
             bullet.color = this.bulletColor;
@@ -30,6 +29,13 @@ export class NormalWeapon extends Weapon{
         return false;
     }
 
+    private bulletListener(bulletEvent: BulletEvent, bullet:Bullet){
+        switch(bulletEvent){
+            case BulletEvent.WALL_HIT:
+                this.deleteBullet(bullet);
+            break;
+        }
+    }
     private deleteBullet(bullet: Bullet){
         const bulletPosition = this.ownBullets.indexOf(bullet);
         if(bulletPosition !== -1 ){

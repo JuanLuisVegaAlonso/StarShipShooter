@@ -1,7 +1,7 @@
 import { Player } from "./ships/player";
 import { frameRate } from "../constants/gameConfig";
 import { PlayerController, Action } from "./playerController";
-import { Bullet } from "./weapons/bullets/bullet";
+import { Bullet, BulletEvent } from "./weapons/bullets/bullet";
 import { Wall } from "./physics/wall-collision-detector";
 import { GameObject } from "./GameObject";
 import { BulletFactory } from "./weapons/bullets/bulletFactory";
@@ -24,7 +24,7 @@ export class GameInstance {
         this.width = width;
         this.ctx = ctx;
         this.playerController = playerController;
-        this._bulletFactory = new BulletFactory(this,(bullet) => this.bulletCollisionedOnWall(bullet));
+        this._bulletFactory = new BulletFactory(this,(bulletEvent,bullet) => this.bulletCollisionedOnWall(bulletEvent,bullet));
         this._weaponFactory = new WeaponFactory(this, this._bulletFactory);
         this.resetGameInstance();
     }
@@ -44,8 +44,12 @@ export class GameInstance {
             gameObject.nextStep(this.ctx);
         }
     }
-    private bulletCollisionedOnWall(bullet: Bullet){
-        this.removeGameObject(bullet);
+    private bulletCollisionedOnWall(bulletEvent:BulletEvent ,bullet: Bullet){
+        switch(bulletEvent){
+            case BulletEvent.WALL_HIT:
+            this.removeGameObject(bullet);
+            break;
+        }
     }
 
     private resetPlayer(){
