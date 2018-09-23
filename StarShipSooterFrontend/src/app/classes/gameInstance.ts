@@ -1,8 +1,11 @@
-import { Player } from "./player";
+import { Player } from "./ships/player";
 import { frameRate } from "../constants/gameConfig";
-import { PlayerController } from "./playerController";
+import { PlayerController, Actions } from "./playerController";
 import { Bullet } from "./weapons/bullets/bullet";
 import { Wall } from "./physics/wall-collision-detector";
+import { GameObject } from "./GameObject";
+import { BulletFactory } from "./weapons/bullets/bulletFactory";
+import { WeaponFactory } from "./weapons/weaponFactory";
 
 export class GameInstance {
 
@@ -12,67 +15,55 @@ export class GameInstance {
     height: number;
     timeout:any;
     playerController:PlayerController;
+    gameObjects: GameObject[];
+    _bulletFactory: BulletFactory;
+    _weaponFactory: WeaponFactory;
 
     constructor(width: number, height: number,ctx: CanvasRenderingContext2D,playerController:PlayerController) {
         this.height = height;
         this.width = width;
         this.ctx = ctx;
         this.playerController = playerController;
+        this.gameObjects = [];
+        this._bulletFactory = new BulletFactory(this,(bullet) => this.bulletCollisionedOnWall(bullet));
+        this._weaponFactory = new WeaponFactory(this);
     }
-    public loop(){
+    public startGame(){
+        this.loop();
+    }
+    private loop(){
         this.ctx.clearRect(0,0,this.width,this.height);
-        this.playerController.evaluateInput();
-        this.wallCollision();
-        this.bulletWallColisionNotBucle();
-        this.nextStep();
+
+        // TODO change to allow multiple players
+        if(this.players && this.players.length > 0){
+            this.players[0].evaluateUserInput(this.playerController.evaluateInput());
+        }
+       // this.bulletWallColisionNotBucle();
+        this.updateAllGameObjects();
         this.timeout = setTimeout(()=> this.loop(),frameRate);
     }
 
-    private wallCollision() {
-        for (const player of this.players) {
-            const collisions = player.wallCollisionDetector.getCollitions();
-            for(let collision of collisions){
-                switch (collision){
-                    case Wall.LEFT:
-                        player.physicsController.velocity.x = 0;
-                        player.physicsController.locationInfo.position.x = 0;
-                    break;
-                    case Wall.TOP:
-                        player.physicsController.velocity.y = 0;
-                        player.physicsController.locationInfo.position.y = 0;
-                    break;
-                    case Wall.RIGHT:
-                        player.physicsController.velocity.x = 0;
-                        player.physicsController.locationInfo.position.x = this.width;
-                    break;
-                    case Wall.BOT:
-                        player.physicsController.velocity.y = 0;
-                        player.physicsController.locationInfo.position.y = this.width;
-                    break;
-                }
-            }
+    private updateAllGameObjects(){
+        for(const gameObject of this.gameObjects){
+            gameObject.nextStep(this.ctx);
         }
     }
-    private nextStep(){
-        for(let player of this.players){
-            player.nextStep(this.ctx);
-        }
+    private bulletCollisionedOnWall(bullet: Bullet){
+        this.removeGameObject(bullet);
     }
-
-    private bulletWallColisionNotBucle(){
-        for(const player  of this.players){
-            player.weapon.ownBullets = player.weapon.ownBullets.filter(bullet => !this.bulletWallColision(bullet));
-        }
-    }
-    private bulletWallColision(bullet:Bullet) {
-        const collisions = bullet.wallCollisionDetector.getCollitions();
-        if( collisions.length > 0){
-            return true;
-        }
-        return false;
-    }
-
     insertPlayers(players: Player[]){
         this.players = players;
+        for(const player of players){
+            this.addGameObject(player);
+        }
+    }
+    public addGameObject(gameObject:GameObject){
+        this.gameObjects.push(gameObject);
+    }
+    public removeGameObject(gameObject: GameObject){
+        const gameObjectPosition  =this.gameObjects.indexOf(gameObject);
+        if(gameObjectPosition !== -1){
+            this.gameObjects.splice(gameObjectPosition,1);
+        }
     }
 }

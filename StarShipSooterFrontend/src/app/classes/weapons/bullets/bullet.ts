@@ -1,5 +1,4 @@
 import { GameObject } from "../../GameObject";
-import { Player } from "../../player";
 import { Vector } from "../../vector";
 import { Weapon } from "../weapon";
 import { BulletShape } from "./bulletShape";
@@ -10,10 +9,14 @@ import { LocationInfo } from "../../locationInfo";
 
 export class Bullet extends GameObject {
     color:string;
+    private _onWallColission: (bullet:Bullet) => void;
+    private _weaponOnWallColission: (bullet: Bullet) => void;
     private bulletRadius:number;
 
-    constructor(gameObjectDependencies){
+    constructor(gameObjectDependencies,onWallColission: (bullet:Bullet) => void,weaponOnWallColission: (bullet:Bullet) => void){
         super(gameObjectDependencies);
+        this._onWallColission = onWallColission;
+        this._weaponOnWallColission = weaponOnWallColission;
     }
 
     public setSpeed(speed:number){
@@ -28,6 +31,10 @@ export class Bullet extends GameObject {
 
     public nextStep(context:CanvasRenderingContext2D){
         this.physicsController.nextLocationInfo();
+        if(this.wallCollisionDetector.getCollitions().length > 0){
+            this._onWallColission(this);
+            this._weaponOnWallColission(this);
+        }
         this.draw(context,this.physicsController.locationInfo);
     }
 

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Player } from '../classes/player';
+import { Player } from '../classes/ships/player';
 import { ForceColor } from '../classes/forcesColor';
 import { frameRate } from '../constants/gameConfig';
 

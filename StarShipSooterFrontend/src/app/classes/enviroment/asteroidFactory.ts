@@ -9,11 +9,10 @@ export class AsteroidFactory {
     private _canvasSize: number[];
     private _difficulty: number;
 
-    private constructor(canvasSize: number[]) {
+    constructor(canvasSize: number[],) {
         this._canvasSize = canvasSize;
     }
     static getInstance(difficulty: number) {
-
         let instance = new AsteroidFactory([width, height]);
         instance._difficulty = difficulty;
         return instance;

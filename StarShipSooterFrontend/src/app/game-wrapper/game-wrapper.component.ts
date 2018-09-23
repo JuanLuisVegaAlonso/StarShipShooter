@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Context } from 'vm';
-import { Player } from '../classes/player';
+import { Player } from '../classes/ships/player';
 import { keys } from '../constants/keys';
 import { width, height } from '../constants/canvasSize';
 import { frameRate } from '../constants/gameConfig';
@@ -41,12 +41,12 @@ export class GameWrapperComponent implements OnInit {
       this.key[event.keyCode] = event.type == 'keydown';
     }, false);
     
-    this.player1 = new Player(1,GameObject.initGameObject());
-    this.reset();
-    this.playerController = new PlayerController(this.player1,this.key);
+    this.playerController = new PlayerController(this.key);
     this.gameInstance = new GameInstance(width,height,this.ctx,this.playerController);
+    this.player1 = new Player(1,GameObject.initGameObject(),this.gameInstance._weaponFactory.createWeapon(GameObject.initGameObject(),this.gameInstance._bulletFactory));
+    this.reset();
     this.gameInstance.insertPlayers([this.player1]);
-    this.gameInstance.loop();
+    this.gameInstance.startGame();
   }
 
   public showMoreInfo(){
@@ -73,6 +73,6 @@ export class GameWrapperComponent implements OnInit {
   fullReset(){
     this.reset();
     clearTimeout(this.gameInstance.timeout);
-    this.gameInstance.loop();
+    this.gameInstance.startGame();
   }
 }

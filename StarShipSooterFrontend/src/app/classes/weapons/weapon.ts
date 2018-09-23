@@ -2,6 +2,7 @@ import { Point } from "../point";
 import { GameObject, GameObjectDependencies } from "../GameObject";
 import { Bullet } from "./bullets/bullet";
 import { LocationInfo } from "../locationInfo";
+import { BulletFactory } from "./bullets/bulletFactory";
 
 export abstract class Weapon extends GameObject{
     bulletSpeed:number;
@@ -11,14 +12,17 @@ export abstract class Weapon extends GameObject{
     ownBullets: Bullet[];
     fireRate:number;
     protected lastShootedAt:number;
-    constructor(gameObjectDependencies:GameObjectDependencies){
+    protected _bulletFactory: BulletFactory;
+
+    constructor(gameObjectDependencies:GameObjectDependencies,bulletFactory:BulletFactory){
         super(gameObjectDependencies);
         this.bulletColor = 'red';
         this.bulletSpeed = 10;
         this.maxBullets = 10;
         this.getBulletRadius = () =>  2;
         this.ownBullets = [];
-        this.fireRate = 1000;
+        this.fireRate = 100;
+        this._bulletFactory = bulletFactory;
     }
     abstract shoot(locationInfo:LocationInfo):boolean;
 
