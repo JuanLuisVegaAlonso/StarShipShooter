@@ -14,6 +14,7 @@ export class BulletFactory{
     public createBullet(onWallColission: (bullet) => void){
         const bullet = new Bullet(GameObject.initGameObject());
         this._world.addGameObject(bullet);
+        bullet.subscribe(this._onWallColission);
         return bullet;
     }
 }
